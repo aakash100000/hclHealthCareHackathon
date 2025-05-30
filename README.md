@@ -30,9 +30,28 @@ statusCode
 Response
 {
 List<ShiftInstance>
-
 }
 
+
+/addStaff
+Request
+{
+  name,
+  role,
+  shift_preference,
+  email,
+  contact
+}
+Response {
+  status,
+  id
+}
+
+/removeStaff/:id
+Response 
+{
+  is_deleted: true/false
+}
 
 /fetchAllStaffs
 Response
