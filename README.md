@@ -9,7 +9,7 @@ API endpoints:
     }
   Response
     {
-      status,s
+      status
       id
     }
 
