@@ -1,0 +1,109 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Shift Schedule</h4>
+        <button class="btn btn-success" (click)="openAddModal(addShiftModal)">Add Shift</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Shift Type</th>
+                    <th>Capacity</th>
+                    <th>Assigned Staff</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shift of shifts; let i = index">
+                    <td>{{ shift.id }}</td>
+                    <td>{{ shift.date }}</td>
+                    <td>{{ shift.type }}</td>
+                    <td>{{ shift.capacity }}</td>
+                    <td>
+                        <ul class="mb-0 ps-3">
+                            <li *ngFor="let staff of shift.assignedStaff">{{ staff }}</li>
+                            <li *ngIf="shift.assignedStaff.length === 0" class="text-muted">None</li>
+                        </ul>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-primary"
+                            (click)="openAssignModal(assignModal, i)">Assign</button>
+                    </td>
+                </tr>
+                <tr *ngIf="shifts.length === 0">
+                    <td colspan="6" class="text-center text-muted">No shifts scheduled.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Shift Modal -->
+    <ng-template #addShiftModal let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Add Shift</h5>
+            <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+        </div>
+        <form [formGroup]="shiftForm" (ngSubmit)="addShift(modal)">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" formControlName="date" [min]="today | date:'yyyy-MM-dd'" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Shift Type</label>
+                    <select class="form-select" formControlName="type">
+                        <option value="">Select</option>
+                        <option>Morning</option>
+                        <option>Afternoon</option>
+                        <option>Night</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Capacity</label>
+                    <input type="number" class="form-control" formControlName="capacity" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" (click)="modal.dismiss()">Cancel</button>
+                <button class="btn btn-primary" type="submit" [disabled]="shiftForm.invalid">Add Shift</button>
+            </div>
+        </form>
+    </ng-template>
+
+    <!-- Assign Staff Modal -->
+    <ng-template #assignModal let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Assign Staff</h5>
+            <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+        </div>
+        <form (ngSubmit)="assignStaffs(modal)">
+            <div class="modal-body">
+                <div class="mb-2 text-muted">
+                    Selected: {{ selectedCount }} / {{ currentShiftCapacity }}
+                </div>
+
+                <div *ngFor="let staff of filteredStaffs" class="form-check">
+                    <input class="form-check-input" type="checkbox" [checked]="selectedStaffs.has(staff)"
+                        (change)="toggleStaffSelection(staff)" [disabled]="isCheckboxDisabled(staff)" [id]="staff" />
+                    <label class="form-check-label" [for]="staff">{{ staff }}</label>
+                </div>
+
+                <div *ngIf="selectedCount > currentShiftCapacity" class="text-danger mt-2">
+                    You cannot assign more staff than the shift's capacity.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" (click)="modal.dismiss()">Cancel</button>
+                <button class="btn btn-success" type="submit" [disabled]="selectedCount > currentShiftCapacity">
+                    Assign Selected
+                </button>
+            </div>
+        </form>
+    </ng-template>
+</div>
+  
