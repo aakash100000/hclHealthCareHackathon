@@ -2,59 +2,60 @@
 API endpoints:
 
 /login
-{
-username,
-password
-}
-Response
-{
-status: true
-}
+  Request
+    {
+      username,
+      password
+    }
+  Response
+    {
+      status
+      id
+    }
 
 /createShift
-{
-date,
-type,
-capacity
-}
-Response
-{
-id
-statusCode
-}
+  Request
+    {
+      date,
+      type,
+      capacity
+    }
+  Response
+    {
+      status,
+      id
+    }
 
-/getShiftByDate
-{
-  date
-}
-Response
-{
-List<ShiftInstance>
-}
+/getShiftByDate/:date
+  Response
+    {
+      List<ShiftInstance>
+    }
 
 
 /addStaff
-Request
-{
-  name,
-  role,
-  shift_preference,
-  email,
-  contact
-}
-Response {
-  status,
-  id
-}
+  Request
+    {
+      name,
+      role,
+      shift_preference,
+      email,
+      contact
+    }
+  Response 
+    {
+      status,
+      id
+    }
 
 /removeStaff/:id
-Response 
-{
-  is_deleted: true/false
-}
+  Response 
+    {
+      is_deleted: true/false
+    }
 
 /fetchAllStaffs
-Response
-{
-List<Staffs>
-}
+  Response
+    {
+      List<Staffs>
+    }
